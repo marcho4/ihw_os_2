@@ -120,8 +120,10 @@ void handle_sigint(int sig) {
 };
 
 int main() {
-    struct sigaction sa{.__sigaction_handler = handle_sigint, .sa_flags = SA_SIGINFO};
-    sigaction(SIGINT, &sa, NULL);
+    struct sigaction sa{};
+    sa.sa_handler = handle_sigint;
+    sa.sa_flags = 0;
+    sigaction(SIGINT, &sa, nullptr);
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -253,7 +255,7 @@ int main() {
                 int choice1 = tournamentState->players_moves[player1];
                 int choice2 = tournamentState->players_moves[player2];
                 sem_post(mainSem);
-                
+
                 std::cout << "   Игрок " << player1 + 1 << " выбрал " << moves[choice1] << std::endl;
                 std::cout << "   Игрок " << player2 + 1 << " выбрал " << moves[choice2] << std::endl;
                 
